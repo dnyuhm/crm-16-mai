@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Order } from 'src/app/core/models/order';
 import { OrdersService } from '../../services/orders.service';
 
@@ -9,11 +10,12 @@ import { OrdersService } from '../../services/orders.service';
 })
 export class PageListOrdersComponent implements OnInit {
   public myTitle: string;
-  public collection!: Order[];
+  public collection$: Observable<Order[]>;
   public headers: string[];
 
   constructor(private ordersService: OrdersService) {
     this.myTitle = 'my list of orders';
+    this.collection$ = this.ordersService.collection$;
     this.headers = [
       'type',
       'client',
@@ -23,11 +25,6 @@ export class PageListOrdersComponent implements OnInit {
       'total ttc',
       'state',
     ];
-
-    this.ordersService.collection$.subscribe((data) => {
-      console.log(data);
-      this.collection = data;
-    });
   }
 
   ngOnInit(): void {}
